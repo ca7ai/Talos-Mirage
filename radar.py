@@ -31,3 +31,10 @@ async def get_telemetry():
                     except json.JSONDecodeError:
                         continue
     return logs[-50:]
+
+@app.post("/api/telemetry/clear")
+async def clear_telemetry():
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "w") as f:
+            f.write("")
+    return {"status": "cleared"}

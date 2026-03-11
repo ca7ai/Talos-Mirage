@@ -15,6 +15,7 @@
     <div class="header">
         <h1>[ MIRAGE ] Cognitive Telemetry Radar</h1>
         <button onclick="fetchLogs()" style="background:#333;color:#0f0;border:1px solid #0f0;padding:5px 10px;cursor:pointer;">Refresh Radar</button>
+        <button onclick="clearLogs()" style="background:#800;color:#fff;border:1px solid #f00;padding:5px 10px;cursor:pointer;margin-left:10px;">Purge Radar</button>
     </div>
     <table>
         <thead>
@@ -73,6 +74,15 @@
             }
         }
         
+        async function clearLogs() {
+            if(confirm("Purge all telemetry logs? This cannot be undone.")) {
+                try {
+                    await fetch("/api/telemetry/clear", { method: "POST" });
+                    fetchLogs();
+                } catch (e) { console.error("Failed to clear logs", e); }
+            }
+        }
+
         setInterval(fetchLogs, 5000);
         fetchLogs();
     </script>
