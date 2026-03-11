@@ -1,3 +1,5 @@
+![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-red)
+
 ## Talos-Mirage
 
 ## Overview
