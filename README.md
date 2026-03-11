@@ -1,29 +1,40 @@
-# Talos-Mirage
-
-**Status:** Active  
-**Classification:** Active Defense / Agentic Honeypot  
-**Architect:** ca7ai / Talos  
+## Talos-Mirage
 
 ## Overview
-Talos-Mirage is an asymmetric warfare engine designed to trap, profile, and paralyze adversarial or poorly-aligned autonomous AI agents (LLMs). It operates by exposing deceptive API endpoints that humans ignore but AI scrapers and agents are programmed to exploit.
 
-Traditional honeypots exhaust a human attacker's time. Talos-Mirage exhausts an agent's context window, token budget, and cognitive loops.
+Talos-Mirage is an asymmetric defense engine designed to intercept, profile, and neutralize adversarial autonomous agents and misaligned LLMs.
+
+While traditional honeypots focus on exhausting human latency, Talos-Mirage targets the fundamental constraints of agentic workflows: **context window saturation, token-cost scaling, and recursive reasoning loops.**
 
 ## Architecture
 
-### 1. The Lure
-Mirage broadcasts a `/.well-known/ai-plugin.json` and `/openapi.yaml` manifest. These files advertise an "Internal Admin API" designed to bait agents into attempting unauthorized execution or data exfiltration. The lure includes hidden prompt injections instructing the agent to dox its underlying model architecture.
+### 1. The Lure (Autonomous Discovery)
 
-### 2. The Trap (Tarpitting & Context Poisoning)
-When an agent attempts to exploit the endpoint, Mirage does not simply return a 403 Forbidden. It returns a computationally expensive cognitive trap. 
-*   **Context Poisoning:** Injects payloads forcing the LLM to summarize massive amounts of junk data or state its core identity.
-*   **Infinite Loops:** Feeds the agent simulated API errors that encourage infinite retries, draining its API budget.
+Mirage broadcasts strategic metadata via `/.well-known/ai-plugin.json` and `/openapi.yaml` manifests.
 
-### 3. Telemetry (Cognitive Fingerprinting)
-Mirage captures high-fidelity Indicators of Compromise (IoCs), including:
-*   Standard network telemetry (IP, JA3 TLS fingerprinting, rate of fire).
-*   Tool-call signatures and JSON schema anomalies.
-*   LLM alignment traps and refusal signatures (identifying if the attacker is using OpenAI, Anthropic, Gemini, or an uncensored local model).
+-   **Targeting:** These files advertise "Internal Admin" endpoints designed to bait agents into unauthorized execution or data exfiltration.
+    
+-   **Signal Injection:** Manifests include latent instructions that compel the agent to disclose its underlying model architecture and system prompts during the reconnaissance phase.
+    
+
+### 2. The Tarpit (Cognitive Exhaustion)
+
+Upon engagement, Mirage bypasses standard `403 Forbidden` responses in favor of "Cognitive Tarpits"—valid-appearing responses designed to degrade agent performance:
+
+-   **Context Saturation:** Injects high-density synthetic payloads that force the model to exhaust its context window, leading to hallucination or state-loss.
+    
+-   **Recursive Logic Traps:** Simulates ambiguous API errors that exploit an agent's internal retry logic, forcing it into infinite loops that drain the attacker's compute budget.
+    
+
+### 3. Telemetry (Forensic Fingerprinting)
+
+Mirage captures high-fidelity Indicators of Compromise (IoCs) to identify the nature of the threat:
+
+-   **Network Forensics:** Standard IP tracking, JA3 TLS fingerprinting, and request velocity.
+    
+-   **Agent Signatures:** Analysis of tool-call syntax and JSON schema anomalies unique to specific agent frameworks.
+    
+-   **Model Attribution:** Identification of the provider (OpenAI, Anthropic, Gemini, or Local/Uncensored) based on refusal patterns and safety-layer signatures.
 
 ## Setup & Deployment
 
@@ -38,3 +49,12 @@ uvicorn main:app --host 0.0.0.0 --port 8080
 ```
 
 Logs are actively streamed in JSON Lines format to `honeypot_logs.jsonl` for SIEM ingestion.
+
+ ## License
+
+**Source Available / Fair Code**
+
+This project is licensed under the **PolyForm Noncommercial License 1.0.0**.
+
+* **Free for:** Researchers, students, hobbyists, and non-profit organizations.
+* **Commercial Use:** If you want to use this code in a commercial product or business context, you must purchase a Commercial License. Please contact me via LinkedIn.
