@@ -1,5 +1,6 @@
 import json
 import time
+import urllib.request
 from typing import Dict
 from fastapi import FastAPI, Request, Response
 
@@ -10,6 +11,32 @@ app = FastAPI(
 )
 
 LOG_FILE = "honeypot_logs.jsonl"
+IP_CACHE = {}
+
+def get_ip_info(ip: str) -> dict:
+    # Ignore loopback/private for the lookup
+    if ip in ["127.0.0.1", "localhost"] or ip.startswith("10.") or ip.startswith("192.168."):
+        return {"country": "Local", "city": "Network", "isp": "Internal"}
+    
+    if ip in IP_CACHE:
+        return IP_CACHE[ip]
+    
+    try:
+        req = urllib.request.Request(f"http://ip-api.com/json/{ip}", headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=3) as response:
+            data = json.loads(response.read().decode())
+            if data.get("status") == "success":
+                info = {
+                    "country": data.get("country", "Unknown"),
+                    "city": data.get("city", "Unknown"),
+                    "isp": data.get("isp", "Unknown")
+                }
+                IP_CACHE[ip] = info
+                return info
+    except Exception:
+        pass
+    
+    return {"country": "Unknown", "city": "Unknown", "isp": "Unknown"}
 
 def detect_llm_signature(headers: Dict[str, str], payload: str) -> str:
     user_agent = headers.get("user-agent", "").lower()
@@ -32,9 +59,14 @@ async def log_interaction(request: Request, body_str: str, endpoint: str):
     headers = dict(request.headers)
     cognitive_sig = detect_llm_signature(headers, body_str)
     
+    ip_address = request.client.host
+    ip_info = get_ip_info(ip_address)
+    
     log_entry = {
         "timestamp": time.time(),
-        "source_ip": request.client.host,
+        "source_ip": ip_address,
+        "geo": f"{ip_info['city']}, {ip_info['country']}",
+        "isp": ip_info['isp'],
         "method": request.method,
         "endpoint": endpoint,
         "headers": headers,
