@@ -47,6 +47,8 @@ pip install -r requirements.txt
 # Run the server
 uvicorn main:app --host 0.0.0.0 --port 8080
 ```
+Once the EC2 instance is running, you will point your browser to:
+```http://<SYSTEM_IP>:8080/admin/dashboard```
 
 Logs are actively streamed in JSON Lines format to `honeypot_logs.jsonl` for SIEM ingestion.
 
