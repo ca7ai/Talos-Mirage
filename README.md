@@ -55,13 +55,13 @@ Because `radar.py` is locked down to the server's local loopback (`127.0.0.1`), 
 
 **Step A:** Open a terminal on your local laptop/computer and type the following SSH port binding command:
 ```bash
-ssh -L 8081:127.0.0.1:8081 ubuntu@<YOUR_EC2_PUBLIC_IP>
+ssh -i <private_key>.pem -L 8080:127.0.0.1:8081 <user-name>@<public-IP>
 ```
 *(Leave this terminal window open to keep the tunnel active).*
 
 **Step B:** Open your local web browser and type the following URL exactly as shown:
 ```text
-http://localhost:8081
+http://localhost:8080
 ```
 
 You will now see the live Talos-Mirage Radar telemetry.
