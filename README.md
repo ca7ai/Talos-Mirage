@@ -5,9 +5,10 @@
 **Architect:** ca7ai / Talos  
 
 ## Overview
-Talos-Mirage is an asymmetric warfare engine designed to trap, profile, and paralyze adversarial or poorly-aligned autonomous AI agents (LLMs). It operates by exposing deceptive API endpoints that humans ignore but AI scrapers and agents are programmed to exploit.
+Talos-Mirage is an asymmetric defense engine / AI Agentic Honeypot engineered to intercept, profile, and neutralize adversarial or misaligned autonomous agents. By deploying deceptive API surfaces invisible to humans but high-signal for AI scrapers, it shifts the cost of attack onto the adversary. While traditional honeypots target human latency, Talos-Mirage targets the core architectural constraints of LLMs: context window capacity, token budgets, and recursive reasoning loops.
 
-Traditional honeypots exhaust a human attacker's time. Talos-Mirage exhausts an agent's context window, token budget, and cognitive loops.
+<img width="1403" height="223" alt="1" src="https://github.com/user-attachments/assets/448e3602-fa51-4de0-9ba9-be44be5b7a48" />
+
 
 ## Zero-Trust Architecture
 The system is divided into two distinct components to ensure operational security:
