@@ -60,9 +60,13 @@ ssh -i <private_key>.pem -L 8080:127.0.0.1:8081 <user-name>@<public-IP>
 ```
 *(Leave this terminal window open to keep the tunnel active).*
 
-**Step B:** Open your local web browser and type the following URL exactly as shown:
+**Step B:** Run the following command to enable the dashboard
+
+```../venv/bin/python3 -m uvicorn radar:app --host 127.0.0.1 --port 8081```
+
+**Step C:** Open your local web browser and type the following URL exactly as shown:
 ```text
-http://localhost:8080
+http://localhost:8080/admin/dashboard
 ```
 
 You will now see the live Talos-Mirage Radar telemetry.
